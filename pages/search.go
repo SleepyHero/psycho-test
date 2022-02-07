@@ -5,7 +5,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/data/binding"
 	"github.com/psycho-test/config"
 	"image/color"
 	"math/rand"
@@ -15,24 +14,35 @@ import (
 type Record func(suc bool, timeCost int64, keyPressed string,
 	targetKey string, targetIndex int, fontSize int)
 
+type SearchBase struct {
+	W         fyne.Window
+	object    fyne.CanvasObject
+	NextPage  NextPage
+	RecordFuc Record
+	fontSize  float32
+	hintLabel *canvas.Text
+	isTest    bool
+}
+
 type searchPage struct {
-	w          fyne.Window
-	object     fyne.CanvasObject
-	NextPage   NextPage
-	RecordFuc  Record
+	SearchBase
 	RightIndex int
 	TargetKey  string
-	fontSize   float32
-	textStr    binding.String
 }
 
 func (p *searchPage) SetActive() {
-	p.w.SetContent(p.object)
+	p.W.SetContent(p.object)
 	startTime := time.Now().UnixMilli()
-	p.w.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
+	if p.isTest {
+		p.hintLabel.Text = "按1-9数字键选择目标词"
+		p.hintLabel.Refresh()
+	}
+	p.W.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
 		//提示
-		if event.Name == fyne.Key0 {
-			//p.textStr.Set("按1-9数字键选择目标词")
+		if event.Name == fyne.Key0 && !p.isTest {
+			p.hintLabel.Text = fmt.Sprint(p.TargetKey)
+			p.W.Canvas().Refresh(p.hintLabel)
+			return
 		}
 
 		if _, ok := config.KeyMap[string(event.Name)]; !ok {
@@ -43,22 +53,20 @@ func (p *searchPage) SetActive() {
 			suc = true
 		}
 		timeCost := time.Now().UnixMilli() - startTime
-		p.w.Canvas().SetOnTypedKey(nil)
+		p.W.Canvas().SetOnTypedKey(nil)
 		p.RecordFuc(suc, timeCost, string(event.Name), p.TargetKey, p.RightIndex, int(p.fontSize))
 		p.NextPage(2)
 	})
 }
 
-func NewSearchPage(w fyne.Window, textStr binding.String, x, y float32, page NextPage, wordList []string, rightIndex int, textSize float32, record Record) Page {
+func NewSearchPage(w fyne.Window, x, y float32, page NextPage, wordList []string, rightIndex int, textSize float32, record Record, isTest bool) Page {
 
 	self := container.NewWithoutLayout()
-	//Window.SetContent(center)
 
 	targetContainer := container.NewMax()
 	targetContainer.Resize(fyne.NewSize(config.ConfigData.TargetWidth, config.ConfigData.TargetHeight))
 	targetContainer.Move(fyne.NewPos(x, y))
 
-	//outside := container.NewWithoutLayout()
 	labels := make([]fyne.CanvasObject, 0)
 	for i := 0; i < 9; i++ {
 		label := canvas.NewText(wordList[i], color.White)
@@ -70,42 +78,56 @@ func NewSearchPage(w fyne.Window, textStr binding.String, x, y float32, page Nex
 	}
 	center := container.NewAdaptiveGrid(3, labels...)
 
-	//center.Add(label)
-	//targetContainer.Add(outside)
+	hintLabel := canvas.NewText("", color.White)
+	hintLabel.TextSize = textSize
+	hintx, hinty := getHitPos(x, y)
+	hintLabel.Move(fyne.NewPos(hintx, hinty))
+	self.Add(hintLabel)
+
 	targetContainer.Add(center)
 	self.Add(targetContainer)
 
 	return &searchPage{
-		w:          w,
-		object:     self,
-		NextPage:   page,
+		SearchBase: SearchBase{
+			W:         w,
+			object:    self,
+			NextPage:  page,
+			RecordFuc: record,
+			fontSize:  textSize,
+			isTest:    isTest,
+			hintLabel: hintLabel,
+		},
 		RightIndex: rightIndex,
-		RecordFuc:  record,
-		fontSize:   textSize,
 		TargetKey:  wordList[rightIndex],
 	}
 }
 
 type searchNumPage struct {
-	w         fyne.Window
-	object    fyne.CanvasObject
-	NextPage  NextPage
-	RecordFuc Record
-	Num       int
-	fontSize  float32
+	SearchBase
+	Num int
 }
 
 func (p *searchNumPage) SetActive() {
-	p.w.SetContent(p.object)
+	p.W.SetContent(p.object)
 	startTime := time.Now().UnixMilli()
-	p.w.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
+	if p.isTest {
+		p.hintLabel.Text = "大于600按↑，小于600按↓"
+		p.hintLabel.Refresh()
+	}
+	p.W.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
+		//提示
+		//if event.Name == fyne.Key0 && !p.isTest {
+		//	p.hintLabel.Text = fmt.Sprint(p.Num)
+		//	p.hintLabel.Refresh()
+		//	return
+		//}
 		suc := false
 		if event.Name == fyne.KeyUp || event.Name == fyne.KeyDown {
 			timeCost := time.Now().UnixMilli() - startTime
 			if (event.Name == fyne.KeyUp && p.Num > 600) || (event.Name == fyne.KeyDown && p.Num < 600) {
 				suc = true
 			}
-			p.w.Canvas().SetOnTypedKey(nil)
+			p.W.Canvas().SetOnTypedKey(nil)
 			p.RecordFuc(suc, timeCost, string(event.Name), fmt.Sprint(p.Num), 0, int(p.fontSize))
 			p.NextPage(2)
 		}
@@ -113,7 +135,7 @@ func (p *searchNumPage) SetActive() {
 	})
 }
 
-func NewSearchNumPage(w fyne.Window, x, y float32, page NextPage, textSize float32, record Record) Page {
+func NewSearchNumPage(w fyne.Window, x, y float32, page NextPage, textSize float32, record Record, isTest bool) Page {
 
 	self := container.NewWithoutLayout()
 	//Window.SetContent(center)
@@ -131,18 +153,26 @@ func NewSearchNumPage(w fyne.Window, x, y float32, page NextPage, textSize float
 
 	center := container.NewCenter(label)
 
-	//center.Add(label)
-	//targetContainer.Add(outside)
+	hintLabel := canvas.NewText("", color.White)
+	hintLabel.TextSize = textSize
+	hintx, hinty := getHitPos(x, y)
+	hintLabel.Move(fyne.NewPos(hintx, hinty))
+	self.Add(hintLabel)
+
 	targetContainer.Add(center)
 	self.Add(targetContainer)
 
 	return &searchNumPage{
-		w:         w,
-		object:    self,
-		NextPage:  page,
-		RecordFuc: record,
-		Num:       num,
-		fontSize:  textSize,
+		SearchBase: SearchBase{
+			W:         w,
+			object:    self,
+			NextPage:  page,
+			RecordFuc: record,
+			fontSize:  textSize,
+			isTest:    isTest,
+			hintLabel: hintLabel,
+		},
+		Num: num,
 	}
 }
 
@@ -153,5 +183,11 @@ func GenNum() int {
 			return n
 		}
 	}
+}
 
+func getHitPos(x, y float32) (float32, float32) {
+	if x < config.ConfigData.TotalWidth/2 {
+		return config.ConfigData.TotalWidth/2 + 100, y
+	}
+	return config.ConfigData.TotalWidth/2 - 100, y
 }
