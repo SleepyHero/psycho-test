@@ -1,0 +1,15 @@
+totalWidth: 1248
+totalHeight: 192
+targetWidth: 80
+targetHeight: 48
+sleepTime: 1000
+scale: 1
+commendText: |
+  文字清晰度评分
+  1:非常不清晰
+  2:不清晰
+  3:一般
+  4:清晰
+  5:非常清晰
+disName: ["3m", "5m", "7m"]
+fontSize: [6, 12]
