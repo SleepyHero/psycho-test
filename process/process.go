@@ -94,14 +94,14 @@ func (p *ProcessHandler) nextTrail(pageNum int) {
 				p.trailGen.MoveNext()
 				p.trails[1].SetActive()
 			}
-			p.wordGen.GenNextTrail()
+			p.wordGen.GenNextTrail(p.IsTest)
 		}
 	case 3: //评论结束
 		if p.trailGen.IsFinish() {
 			p.trails[2].SetActive()
 		} else {
 			p.trails[0].SetActive()
-			p.wordGen.GenNextTrail()
+			p.wordGen.GenNextTrail(p.IsTest)
 		}
 	case 4: //结束页结束
 		p.pages[2].SetActive()
@@ -112,7 +112,7 @@ func (p *ProcessHandler) nextTrail(pageNum int) {
 			p.trailGen.MoveNextTest()
 			p.trails[1].SetActive()
 		}
-		p.wordGen.GenNextTrail()
+		p.wordGen.GenNextTrail(p.IsTest)
 	}
 }
 
@@ -151,7 +151,7 @@ func (p *ProcessHandler) startTrails(isTest bool) {
 	} else {
 		_ = p.endText.Set(config.FinishGame)
 	}
-	p.trailGen = NewTailGen(p.Dis, p.Region)
+	p.RestartExam()
 	p.trails[0].SetActive()
 }
 
@@ -161,4 +161,11 @@ func (p *ProcessHandler) backInit(isTest bool) {
 
 func (p *ProcessHandler) onCommend(res string) {
 	Push(res)
+}
+
+func (p *ProcessHandler) RestartExam() {
+	p.trailGen = NewTailGen(p.Dis, p.Region)
+	p.wordGen.InitWordGen()
+	//生成第一组随机字段
+	p.wordGen.GenNextTrail(p.IsTest)
 }

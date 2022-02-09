@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/psycho-test/config"
 	"github.com/psycho-test/process"
+	myTheme "github.com/psycho-test/theme"
 	"image/color"
 	"time"
 )
@@ -19,7 +19,6 @@ var (
 
 func main() {
 	//os.Setenv("FYNE_FONT", "/Users/fanbochao/Downloads/微软雅黑.ttf")
-	theme.DefaultTextFont()
 	a := app.New()
 	my := &MyTheme{}
 	a.Settings().SetTheme(my)
@@ -60,15 +59,15 @@ func (*MyTheme) Color(colorName fyne.ThemeColorName, themeVariant fyne.ThemeVari
 	case theme.ColorNameShadow:
 		return green
 	case theme.ColorNameInputBackground:
-		return color.Gray{100}
+		return color.Gray{Y: 100}
 	case theme.ColorNameForeground:
 		return color.White
 	}
 	return theme.DefaultTheme().Color(colorName, themeVariant)
 }
 func (*MyTheme) Font(style fyne.TextStyle) fyne.Resource {
-	res, _ := fyne.LoadResourceFromPath(fmt.Sprintf("%s/font.ttf", config.Dir))
-	return res
+	//res, _ := fyne.LoadResourceFromPath(fmt.Sprintf("%s/font.ttf", config.Dir))
+	return myTheme.ResourceFontTtf
 	//return theme.DefaultTheme().Font(style)
 }
 func (*MyTheme) Icon(iconName fyne.ThemeIconName) fyne.Resource {
