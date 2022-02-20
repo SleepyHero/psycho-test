@@ -78,7 +78,7 @@ func (tg *TrailGen) GetLastTargetInfo() (string, int) {
 		first = 4 + tg.curColunm
 	}
 
-	return fmt.Sprintf("%v-%v", first, tg.lastRow), tg.lastRowTimes
+	return fmt.Sprintf("%v-%v", first, tg.lastRow+1), tg.lastRowTimes
 }
 
 func (tg *TrailGen) MoveNext() {

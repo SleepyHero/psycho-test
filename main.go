@@ -76,9 +76,9 @@ func (*MyTheme) Icon(iconName fyne.ThemeIconName) fyne.Resource {
 func (*MyTheme) Size(sizeName fyne.ThemeSizeName) float32 {
 	switch sizeName {
 	case theme.SizeNameText:
-		return 12
+		return config.ConfigData.TextSize
 	case theme.SizeNameCaptionText:
-		return 12
+		return config.ConfigData.TextSize
 	}
 	return theme.DefaultTheme().Size(sizeName)
 }

@@ -33,28 +33,24 @@ type searchPage struct {
 func (p *searchPage) SetActive() {
 	p.W.SetContent(p.object)
 	startTime := time.Now().UnixMilli()
-	if p.isTest {
-		p.hintLabel.Text = "按1-9数字键选择目标词"
-		p.hintLabel.Refresh()
-	}
 	p.W.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
 		//提示
-		if event.Name == fyne.Key0 && !p.isTest {
+		if event.Name == fyne.Key0 {
 			p.hintLabel.Text = fmt.Sprint(p.TargetKey)
 			p.W.Canvas().Refresh(p.hintLabel)
 			return
 		}
 
-		if _, ok := config.KeyMap[string(event.Name)]; !ok {
+		if _, ok := config.ConfigData.KeyMap[string(event.Name)]; !ok {
 			return
 		}
 		suc := false
-		if config.KeyMap[string(event.Name)] == p.RightIndex {
+		if config.ConfigData.KeyMap[string(event.Name)] == p.RightIndex {
 			suc = true
 		}
 		timeCost := time.Now().UnixMilli() - startTime
 		p.W.Canvas().SetOnTypedKey(nil)
-		p.RecordFuc(suc, timeCost, string(event.Name), p.TargetKey, p.RightIndex, int(p.fontSize))
+		p.RecordFuc(suc, timeCost, string(event.Name), p.TargetKey, p.RightIndex+1, int(p.fontSize))
 		p.NextPage(2)
 	})
 }
@@ -110,17 +106,7 @@ type searchNumPage struct {
 func (p *searchNumPage) SetActive() {
 	p.W.SetContent(p.object)
 	startTime := time.Now().UnixMilli()
-	if p.isTest {
-		p.hintLabel.Text = "大于600按↑，小于600按↓"
-		p.hintLabel.Refresh()
-	}
 	p.W.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
-		//提示
-		//if event.Name == fyne.Key0 && !p.isTest {
-		//	p.hintLabel.Text = fmt.Sprint(p.Num)
-		//	p.hintLabel.Refresh()
-		//	return
-		//}
 		suc := false
 		if event.Name == fyne.KeyUp || event.Name == fyne.KeyDown {
 			timeCost := time.Now().UnixMilli() - startTime
@@ -179,7 +165,7 @@ func NewSearchNumPage(w fyne.Window, x, y float32, page NextPage, textSize float
 func GenNum() int {
 	for {
 		n := rand.Intn(1000)
-		if n != 600 || n < 100 {
+		if n != 600 && n >= 100 && n <= 999 {
 			return n
 		}
 	}

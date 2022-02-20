@@ -27,6 +27,7 @@ type ProcessHandler struct {
 	trailGen   *TrailGen
 	x, y, size float32
 	suc        bool
+	sh         *SaveHelper
 }
 
 func NewProcessHandler(w fyne.Window) *ProcessHandler {
@@ -124,22 +125,26 @@ func (p *ProcessHandler) recordResult(suc bool, timeCost int64, keyPressed strin
 	}
 	targetPos, showTimes := p.trailGen.GetLastTargetInfo()
 
-	SaveRes(p.Kind, p.Dis, p.Region, p.trailGen.GetCount(), fontSize, targetPos, showTimes, timeCost,
+	p.sh.SaveRes(p.Kind, p.Dis, p.Region, p.trailGen.GetCount(), fontSize, targetPos, showTimes, timeCost,
 		keyPressed, suc, "", targetKey, targetIndex, config.Num, config.Gender, config.Age)
 }
 
 func (p *ProcessHandler) startLoop(kind string, dis string, region string) {
 	p.Kind = kind
 	p.Dis = dis
+	if p.sh != nil {
+		p.sh.CloseFile()
+	}
+	p.sh = NewSaveHelper(dis)
 	p.Region = region
 	p.IsText = kind == "文字搜索"
 
 	if p.IsText {
-		_ = p.titleStr.Set(config.TextTitle)
-		_ = p.contentStr.Set(config.TextContent)
+		_ = p.titleStr.Set(config.ConfigData.TextExamTitle)
+		_ = p.contentStr.Set(config.ConfigData.TextExamContent)
 	} else {
-		_ = p.titleStr.Set(config.NumTitle)
-		_ = p.contentStr.Set(config.NumContent)
+		_ = p.titleStr.Set(config.ConfigData.NumExamTitle)
+		_ = p.contentStr.Set(config.ConfigData.NumExamContent)
 	}
 	p.pages[2].SetActive()
 }
@@ -160,7 +165,7 @@ func (p *ProcessHandler) backInit(isTest bool) {
 }
 
 func (p *ProcessHandler) onCommend(res string) {
-	Push(res)
+	p.sh.Push(res)
 }
 
 func (p *ProcessHandler) RestartExam() {

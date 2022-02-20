@@ -13,15 +13,21 @@ var (
 )
 
 type Config struct {
-	TotalWidth   float32   `yaml:"totalWidth"`
-	TotalHeight  float32   `yaml:"totalHeight"`
-	TargetWidth  float32   `yaml:"targetWidth"`
-	TargetHeight float32   `yaml:"targetHeight"`
-	SleepTime    int       `yaml:"sleepTime"`
-	Scale        float32   `yaml:"scale"`
-	CommendText  string    `yaml:"commendText"`
-	DisName      []string  `yaml:"disName"`
-	FontSize     []float32 `yaml:"fontSize"`
+	TotalWidth      float32        `yaml:"totalWidth"`
+	TotalHeight     float32        `yaml:"totalHeight"`
+	TargetWidth     float32        `yaml:"targetWidth"`
+	TargetHeight    float32        `yaml:"targetHeight"`
+	SleepTime       int            `yaml:"sleepTime"`
+	Scale           float32        `yaml:"scale"`
+	CommendText     string         `yaml:"commendText"`
+	DisName         []string       `yaml:"disName"`
+	FontSize        []float32      `yaml:"fontSize"`
+	TextExamTitle   string         `yaml:"textExamTitle"`
+	TextExamContent string         `yaml:"textExamContent"`
+	NumExamTitle    string         `yaml:"numExamTitle"`
+	NumExamContent  string         `yaml:"numExamContent"`
+	KeyMap          map[string]int `yaml:"keyMap"`
+	TextSize        float32        `yaml:"textSize"`
 }
 
 func init() {
