@@ -48,6 +48,7 @@ func (t *TargetWordGen) loadWordList() {
 }
 
 func (t *TargetWordGen) InitWordGen() {
+	t.curWordPool = make([]string, len(t.totalWords), len(t.totalWords))
 	for k, v := range t.totalWords {
 		t.curWordPool[k] = v
 	}

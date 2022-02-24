@@ -53,6 +53,7 @@ func (p *ProcessHandler) initProcess(w fyne.Window) {
 	p.trails = append(p.trails, pages.InitGameFinishPage(w, p.endText, p.nextTrail))
 	p.trails = append(p.trails, pages.InitResultPage(w, true, p.nextTrail))
 	p.trails = append(p.trails, pages.InitResultPage(w, false, p.nextTrail))
+	p.trails = append(p.trails, pages.InitWaitCommendPage(w, p.nextTrail))
 
 	p.pages[0].SetActive()
 }
@@ -89,11 +90,10 @@ func (p *ProcessHandler) nextTrail(pageNum int) {
 			}
 		} else {
 			if !p.trailGen.IsCurrentFinish(p.IsTest) {
-
 				p.trails[0].SetActive()
 			} else {
 				p.trailGen.MoveNext()
-				p.trails[1].SetActive()
+				p.trails[5].SetActive()
 			}
 			p.wordGen.GenNextTrail(p.IsTest)
 		}
@@ -114,11 +114,13 @@ func (p *ProcessHandler) nextTrail(pageNum int) {
 			p.trails[1].SetActive()
 		}
 		p.wordGen.GenNextTrail(p.IsTest)
+	case 6: //结束页结束
+		p.trails[1].SetActive()
 	}
 }
 
 func (p *ProcessHandler) recordResult(suc bool, timeCost int64, keyPressed string,
-	targetKey string, targetIndex int, fontSize int) {
+	targetKey string, targetIndex int, fontSize int, useHint bool) {
 	p.suc = suc
 	if p.IsTest {
 		return
@@ -126,7 +128,7 @@ func (p *ProcessHandler) recordResult(suc bool, timeCost int64, keyPressed strin
 	targetPos, showTimes := p.trailGen.GetLastTargetInfo()
 
 	p.sh.SaveRes(p.Kind, p.Dis, p.Region, p.trailGen.GetCount(), fontSize, targetPos, showTimes, timeCost,
-		keyPressed, suc, "", targetKey, targetIndex, config.Num, config.Gender, config.Age)
+		keyPressed, suc, "", targetKey, targetIndex, config.Num, config.Gender, config.Age, useHint)
 }
 
 func (p *ProcessHandler) startLoop(kind string, dis string, region string) {

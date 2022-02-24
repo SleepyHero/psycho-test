@@ -25,7 +25,8 @@ func newFile(dis string) *os.File {
 
 func openFile(dis string) (*os.File, bool) {
 	var ff *os.File
-	filename := config.Dir + "/" + config.Num + "_" + dis + "_" + time.Now().Format("2006-01-02") + ".csv"
+	filename := config.Dir + "/" + config.Num + "_" + dis + "_" + time.Now().Format("2006-01-02_15:04:05") + ".csv"
+	println(filename)
 	exist := false
 	if checkFileIsExist(filename) { //如果文件存在
 		ff, _ = os.OpenFile(filename, os.O_WRONLY|os.O_APPEND, 0666) //打开文件
@@ -40,9 +41,9 @@ func openFile(dis string) (*os.File, bool) {
 }
 
 func writeHeader(f *os.File) {
-	str := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v\n",
+	str := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v\n",
 		"用户编号", "性别", "年龄", "实验类型", "距离", "呈现区域", "trail序号", "字号", "文字区域",
-		"该区域第几次出现", "反应时（毫秒）", "用户按键", "选择是否正确", "主观评价", "目标词", "目标词位置")
+		"该区域第几次出现", "反应时（毫秒）", "用户按键", "选择是否正确", "主观评价", "目标词", "目标词位置", "是否点击提示")
 	writeFile(f, str)
 }
 
@@ -77,7 +78,7 @@ func NewSaveHelper(dis string) *SaveHelper {
 
 func (sh *SaveHelper) SaveRes(kind string, dis string, region string, trailNo int, fontSize int,
 	targetZone string, showTimes int, reactTime int64, pressBtn string, suc bool,
-	CommentNum string, targetWord string, targetNum int, number string, gender string, age string) {
+	CommentNum string, targetWord string, targetNum int, number string, gender string, age string, useHint bool) {
 	saveMsg := sh.saveBatch[sh.Index]
 	saveMsg.kind = kind
 	saveMsg.dis = dis
@@ -95,6 +96,7 @@ func (sh *SaveHelper) SaveRes(kind string, dis string, region string, trailNo in
 	saveMsg.number = number
 	saveMsg.gender = gender
 	saveMsg.age = age
+	saveMsg.userHint = useHint
 	sh.Index++
 	sh.Index = sh.Index % 8
 }
@@ -102,9 +104,9 @@ func (sh *SaveHelper) SaveRes(kind string, dis string, region string, trailNo in
 func (sh *SaveHelper) Push(commend string) {
 	sh.Index = 0
 	for _, v := range sh.saveBatch {
-		str := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v\n",
+		str := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v\n",
 			v.number, v.gender, v.age, v.kind, v.dis, v.region, v.trailNo, v.fontSize, v.targetZone,
-			v.showTimes, v.reactTime, v.pressBtn, v.suc, commend, v.targetWord, v.targetNum)
+			v.showTimes, v.reactTime, v.pressBtn, v.suc, commend, v.targetWord, v.targetNum, v.userHint)
 		writeFile(sh.f, str)
 	}
 }

@@ -12,7 +12,7 @@ import (
 )
 
 type Record func(suc bool, timeCost int64, keyPressed string,
-	targetKey string, targetIndex int, fontSize int)
+	targetKey string, targetIndex int, fontSize int, useHint bool)
 
 type SearchBase struct {
 	W         fyne.Window
@@ -28,6 +28,7 @@ type searchPage struct {
 	SearchBase
 	RightIndex int
 	TargetKey  string
+	useHint    bool
 }
 
 func (p *searchPage) SetActive() {
@@ -38,6 +39,7 @@ func (p *searchPage) SetActive() {
 		if event.Name == fyne.Key0 {
 			p.hintLabel.Text = fmt.Sprint(p.TargetKey)
 			p.W.Canvas().Refresh(p.hintLabel)
+			p.useHint = true
 			return
 		}
 
@@ -50,7 +52,7 @@ func (p *searchPage) SetActive() {
 		}
 		timeCost := time.Now().UnixMilli() - startTime
 		p.W.Canvas().SetOnTypedKey(nil)
-		p.RecordFuc(suc, timeCost, string(event.Name), p.TargetKey, p.RightIndex+1, int(p.fontSize))
+		p.RecordFuc(suc, timeCost, string(event.Name), p.TargetKey, p.RightIndex+1, int(p.fontSize), p.useHint)
 		p.NextPage(2)
 	})
 }
@@ -114,7 +116,7 @@ func (p *searchNumPage) SetActive() {
 				suc = true
 			}
 			p.W.Canvas().SetOnTypedKey(nil)
-			p.RecordFuc(suc, timeCost, string(event.Name), fmt.Sprint(p.Num), 0, int(p.fontSize))
+			p.RecordFuc(suc, timeCost, string(event.Name), fmt.Sprint(p.Num), 0, int(p.fontSize), false)
 			p.NextPage(2)
 		}
 

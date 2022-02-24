@@ -17,6 +17,7 @@ type SaveItem struct {
 	number     string
 	gender     string
 	age        string
+	userHint   bool
 }
 
 var (
