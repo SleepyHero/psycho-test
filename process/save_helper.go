@@ -15,17 +15,17 @@ type SaveHelper struct {
 	Index     int
 }
 
-func newFile(dis string) *os.File {
-	ff, exist := openFile(dis)
+func newFile(dis string, kind string) *os.File {
+	ff, exist := openFile(dis, kind)
 	if !exist {
 		writeHeader(ff)
 	}
 	return ff
 }
 
-func openFile(dis string) (*os.File, bool) {
+func openFile(dis string, kind string) (*os.File, bool) {
 	var ff *os.File
-	filename := config.Dir + "/" + config.Num + "_" + dis + "_" + time.Now().Format("2006-01-02_15:04:05") + ".csv"
+	filename := config.Dir + "/" + config.Num + "_" + kind + "_" + dis + "_" + time.Now().Format("2006-01-02_15:04:05") + ".csv"
 	println(filename)
 	exist := false
 	if checkFileIsExist(filename) { //如果文件存在
@@ -61,8 +61,8 @@ func writeFile(f *os.File, str string) {
 	}
 }
 
-func NewSaveHelper(dis string) *SaveHelper {
-	f := newFile(dis)
+func NewSaveHelper(dis string, kind string) *SaveHelper {
+	f := newFile(dis, kind)
 	saveBatch := make([]*SaveItem, 8, 8)
 	for i := 0; i < 8; i++ {
 		saveBatch[i] = &SaveItem{}

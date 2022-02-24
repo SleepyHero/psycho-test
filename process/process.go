@@ -137,7 +137,7 @@ func (p *ProcessHandler) startLoop(kind string, dis string, region string) {
 	if p.sh != nil {
 		p.sh.CloseFile()
 	}
-	p.sh = NewSaveHelper(dis)
+	p.sh = NewSaveHelper(dis, kind)
 	p.Region = region
 	p.IsText = kind == "文字搜索"
 
