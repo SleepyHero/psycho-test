@@ -111,7 +111,7 @@ func (p *ProcessHandler) nextTrail(pageNum int) {
 			p.trails[0].SetActive()
 		} else {
 			p.trailGen.MoveNextTest()
-			p.trails[1].SetActive()
+			p.trails[5].SetActive()
 		}
 		p.wordGen.GenNextTrail(p.IsTest)
 	case 6: //结束页结束
