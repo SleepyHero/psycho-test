@@ -25,7 +25,7 @@ func newFile(dis string, kind string) *os.File {
 
 func openFile(dis string, kind string) (*os.File, bool) {
 	var ff *os.File
-	filename := config.Dir + string(os.PathSeparator) + config.Num + "_" + kind + "_" + dis + "_" + time.Now().Format("2006-01-02_15:04:05") + ".csv"
+	filename := config.Dir + string(os.PathSeparator) + config.Num + "_" + kind + "_" + dis + "_" + time.Now().Format("2006-01-02_15_04_05") + ".csv"
 	println(filename)
 	exist := false
 	if checkFileIsExist(filename) { //如果文件存在
