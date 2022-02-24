@@ -167,7 +167,9 @@ func (p *ProcessHandler) backInit(isTest bool) {
 }
 
 func (p *ProcessHandler) onCommend(res string) {
-	p.sh.Push(res)
+	if !p.IsTest {
+		p.sh.Push(res)
+	}
 }
 
 func (p *ProcessHandler) RestartExam() {
