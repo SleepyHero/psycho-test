@@ -3,7 +3,7 @@ totalHeight: 192
 targetWidth: 80
 targetHeight: 48
 sleepTime: 1000
-scale: 1
+scale: 10
 commendText: |
   文字清晰度评分
   1：非常不清晰

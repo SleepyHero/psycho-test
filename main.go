@@ -22,12 +22,13 @@ func main() {
 	a := app.New()
 	my := &MyTheme{}
 	a.Settings().SetTheme(my)
-	w := a.NewWindow("Hello")
+	w := a.NewWindow("")
 	w.Resize(fyne.Size{
 		Width:  config.ConfigData.TotalWidth + 5,
 		Height: config.ConfigData.TotalHeight + 5,
 	})
-	w.CenterOnScreen()
+	w.SetFixedSize(true)
+	//w.CenterOnScreen()
 	process.NewProcessHandler(w)
 	w.Show()
 	a.Run()
