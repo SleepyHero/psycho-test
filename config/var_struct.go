@@ -44,6 +44,10 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	ConfigData.TotalHeight *= ConfigData.Scale
+	ConfigData.TotalWidth *= ConfigData.Scale
+	ConfigData.TargetWidth *= ConfigData.Scale
+	ConfigData.TargetHeight *= ConfigData.Scale
 	TargetDis = (ConfigData.TotalWidth/2 - ConfigData.TargetWidth*3.5) / 3
 
 }
