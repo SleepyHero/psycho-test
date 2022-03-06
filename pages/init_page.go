@@ -32,7 +32,7 @@ func NewInitPage(w fyne.Window, nextPage NextPage) *DefaultPage {
 	ageEntry := widget.NewEntry()
 	age := widget.NewFormItem("年龄", ageEntry)
 	form := widget.NewForm(num, gender, age)
-	form.Resize(fyne.NewSize(10, 200))
+	form.Resize(fyne.NewSize(10*config.ConfigData.Scale, 200*config.ConfigData.Scale))
 	form.Refresh()
 	button := widget.NewButton("进入实验", func() {
 		fmt.Println(numEntry.Text)

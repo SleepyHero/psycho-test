@@ -46,7 +46,7 @@ func NewStartPage(w fyne.Window, nextPage StartLoop) *DefaultPage {
 	})
 
 	hl := container.NewHBox(startButton, layout.NewSpacer(), exitButton)
-	bg := container.NewVBox(layout.NewSpacer(), lable, form, layout.NewSpacer(), hl, layout.NewSpacer())
+	bg := container.NewVBox(layout.NewSpacer(), lable, form, hl, layout.NewSpacer())
 
 	center.Add(bg)
 	center.Add(layout.NewSpacer())

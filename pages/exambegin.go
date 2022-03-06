@@ -31,7 +31,7 @@ func InitBeginPage(w fyne.Window, titleStr binding.String, contentStr binding.St
 
 	hl := container.NewHBox(testButton, layout.NewSpacer(), examButton, layout.NewSpacer(), returnButton)
 
-	bg := container.NewVBox(layout.NewSpacer(), label, content, layout.NewSpacer(), hl, layout.NewSpacer())
+	bg := container.NewVBox(layout.NewSpacer(), label, content, hl, layout.NewSpacer())
 
 	bg.Resize(fyne.NewSize(500, 100))
 
