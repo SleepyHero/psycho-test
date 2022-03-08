@@ -12,5 +12,6 @@ var (
 //)
 
 var (
-	TargetDis float32
+	TargetDis  float32
+	BaseHeight float32
 )

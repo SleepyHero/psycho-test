@@ -28,6 +28,8 @@ type Config struct {
 	NumExamContent  string         `yaml:"numExamContent"`
 	KeyMap          map[string]int `yaml:"keyMap"`
 	TextSize        float32        `yaml:"textSize"`
+	WindowHeight    float32        `yaml:"windowHeight"`
+	RepeatTimes     int            `yaml:"repeatTimes"`
 }
 
 func init() {
@@ -48,6 +50,7 @@ func init() {
 	ConfigData.TotalWidth *= ConfigData.Scale
 	ConfigData.TargetWidth *= ConfigData.Scale
 	ConfigData.TargetHeight *= ConfigData.Scale
+	ConfigData.WindowHeight *= ConfigData.Scale
 	TargetDis = (ConfigData.TotalWidth/2 - ConfigData.TargetWidth*3.5) / 3
-
+	BaseHeight = (ConfigData.WindowHeight - ConfigData.TotalHeight) / 2
 }

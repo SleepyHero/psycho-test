@@ -1,5 +1,6 @@
 totalWidth: 1248
 totalHeight: 192
+windowHeight: 216
 targetWidth: 80
 targetHeight: 48
 sleepTime: 1000
@@ -51,4 +52,5 @@ keyMap:
   7: 6
   8: 7
   9: 8
-textSize: 24
+textSize: 12
+repeatTimes: 2

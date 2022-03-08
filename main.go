@@ -25,7 +25,7 @@ func main() {
 	w := a.NewWindow("")
 	w.Resize(fyne.Size{
 		Width:  config.ConfigData.TotalWidth + 5,
-		Height: config.ConfigData.TotalHeight + 5,
+		Height: config.ConfigData.WindowHeight,
 	})
 	w.SetFixedSize(true)
 	//w.CenterOnScreen()
