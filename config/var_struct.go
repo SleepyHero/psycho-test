@@ -30,6 +30,7 @@ type Config struct {
 	TextSize        float32        `yaml:"textSize"`
 	WindowHeight    float32        `yaml:"windowHeight"`
 	RepeatTimes     int            `yaml:"repeatTimes"`
+	CommentHint     string         `yaml:"commentHint"`
 }
 
 func init() {

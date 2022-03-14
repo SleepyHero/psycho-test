@@ -49,7 +49,7 @@ func InitCommentPage(w fyne.Window, page NextPage, onCommend commendFunc) Page {
 	lable := widget.NewLabel(config.ConfigData.CommendText)
 	lable.Alignment = fyne.TextAlignLeading
 
-	lable2 := widget.NewLabel(config.CommentHint)
+	lable2 := widget.NewLabel(config.ConfigData.CommentHint)
 	lable2.Alignment = fyne.TextAlignCenter
 
 	bg := container.NewVBox(layout.NewSpacer(), lable, lable2, layout.NewSpacer())

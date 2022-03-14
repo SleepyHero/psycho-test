@@ -43,7 +43,7 @@ func openFile(dis string, kind string) (*os.File, bool) {
 func writeHeader(f *os.File) {
 	str := fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v,%v\n",
 		"用户编号", "性别", "年龄", "实验类型", "距离", "呈现区域", "trail序号", "字号", "文字区域",
-		"该区域第几次出现", "反应时（毫秒）", "用户按键", "选择是否正确", "主观评价", "目标词", "目标词位置", "是否点击提示")
+		"该区域第几次出现", "反应时", "用户按键", "选择是否正确", "主观评价", "目标字段", "目标字段标号", "是否点击提示")
 	writeFile(f, str)
 }
 
