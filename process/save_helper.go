@@ -63,8 +63,9 @@ func writeFile(f *os.File, str string) {
 
 func NewSaveHelper(dis string, kind string) *SaveHelper {
 	f := newFile(dis, kind)
-	saveBatch := make([]*SaveItem, 8, 8)
-	for i := 0; i < 8; i++ {
+	totalLen := 4 * config.ConfigData.RepeatTimes
+	saveBatch := make([]*SaveItem, totalLen, totalLen)
+	for i := 0; i < totalLen; i++ {
 		saveBatch[i] = &SaveItem{}
 	}
 	sh := &SaveHelper{
@@ -98,7 +99,8 @@ func (sh *SaveHelper) SaveRes(kind string, dis string, region string, trailNo in
 	saveMsg.age = age
 	saveMsg.userHint = useHint
 	sh.Index++
-	sh.Index = sh.Index % 8
+	sh.Index = sh.Index % (4 * config.ConfigData.RepeatTimes)
+
 }
 
 func (sh *SaveHelper) Push(commend string) {

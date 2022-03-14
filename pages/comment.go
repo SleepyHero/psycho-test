@@ -29,6 +29,10 @@ func (p *CommendPage) SetActive() {
 		case fyne.Key4:
 			fallthrough
 		case fyne.Key5:
+			fallthrough
+		case fyne.Key6:
+			fallthrough
+		case fyne.Key7:
 			p.onCommend(string(event.Name))
 			p.nextpage(3)
 			fmt.Println(event.Name)
